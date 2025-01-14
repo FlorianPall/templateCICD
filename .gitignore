@@ -11,3 +11,8 @@ backend/cmd/strichliste/frontendDist
 # binaries
 backend/main
 backend/strichliste
+frontend/angular.json
+
+git config pull.rebase false  # merge
+hint:   git config pull.rebase true   # rebase
+hint:   git config pull.ff only       # fast-forward only
