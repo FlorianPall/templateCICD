@@ -1,3 +1,5 @@
+[![Meine super duper Pipeline](https://github.com/FlorianPall/templateCICD/actions/workflows/example.yml/badge.svg)](https://github.com/FlorianPall/templateCICD/actions/workflows/example.yml)
+
 # CI/CD Lecture template project
 
 A simple checklist implemented in Golang with an angular frontend.
