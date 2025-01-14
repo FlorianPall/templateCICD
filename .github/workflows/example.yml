@@ -73,8 +73,8 @@ jobs:
               host: dhbw.hoenle.xyz
               username: group2
               key: ${{ secrets.PRIVATE_SSH }}
-              source: "./backend/coverage.html"
-              target: "/var/www/group2/actioncoverage.html"
+              source: "./coverage.html"
+              target: "/var/www/group2/"
 
 
             
