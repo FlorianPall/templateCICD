@@ -8,12 +8,18 @@ on:
         branches:
         - main
 jobs:
-    tests:
-        name: Tests
+    checkout:
+        name: Checkout
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
               uses: actions/checkout@v4
+
+    build:
+        name: Build
+        needs: checkout
+        runs-on: ubuntu-latest
+        steps:
 
             - name: Install go
               uses: actions/setup-go@v5
@@ -29,6 +35,11 @@ jobs:
               working-directory: ./frontend
               run: npm ci && npx ng build && cp -r dist/frontend/browser ../backend/cmd/strichliste/frontendDist
 
+    tests:
+        name: Tests
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
             - name: Run tests
               working-directory: ./backend
               run: go test ./...
