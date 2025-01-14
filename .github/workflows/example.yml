@@ -45,4 +45,29 @@ jobs:
               go-version: ${{ env.GO_VERSION }}
           - name: Run gofmt
             run: files=$(gofmt -l ./backend) && [ -z "$files" ]
+
+    codecoverage:
+        name: Code Coverage
+        needs: codeformatting
+        runs-on: ubuntu-latest
+        steps:
+          - name: Checkout
+            uses: actions/checkout@v4
+          - name: Install go
+            uses: actions/setup-go@v5
+            with:
+              go-version: ${{ env.GO_VERSION }}
+          - name: create coverage report
+            working-directory: ./backend
+            run: go test ./... -coverprofile=coverage.out && go tool cover -html=coverage.out -o coverage.html
+          - name: Copy files via SCP action
+            uses: appleboy/scp-action@master
+            with:
+              host: dhbw.hoenle.xyz
+              username: group2
+              key: ${{ secrets.PRIVATE_SSH }}
+              source: "./backend/coverage.html"
+              target: "/var/www/group2/actioncoverage.html"
+
+
             
