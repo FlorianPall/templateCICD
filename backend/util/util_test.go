@@ -12,7 +12,7 @@ func TestRemove(t *testing.T) {
 	t.Run("remove user", func(t *testing.T) {
 		users := []model.User{
 			{Uuid: uuid.New(), DisplayName: "user1", Balance: 3.5},
-			{Uuid: uuid.New(), DisplayName: "user2", Balance: 3.5},
+				{Uuid: uuid.New(), DisplayName: "user2", Balance: 3.5},
 			{Uuid: uuid.New(), DisplayName: "user3", Balance: 3.5},
 		}
 
