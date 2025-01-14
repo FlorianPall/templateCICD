@@ -27,7 +27,7 @@ jobs:
 
             - name: Build frontend
               working-directory: ./frontend
-              run: npm ci && npm ng build && cp -r dist/frontend/browser ../backend/cmd/strichliste/frontendDist
+              run: npm ci && npx ng build && cp -r dist/frontend/browser ../backend/cmd/strichliste/frontendDist
 
             - name: Run tests
               working-directory: ./backend
