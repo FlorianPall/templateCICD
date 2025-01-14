@@ -57,6 +57,13 @@ jobs:
             uses: actions/setup-go@v5
             with:
               go-version: ${{ env.GO_VERSION }}
+          - name: Install node
+            uses: actions/setup-node@v3
+            with:
+              node-version: ${{ env.NODE_VERSION }}
+          - name: Build frontend
+            working-directory: ./frontend
+            run: npm ci && npx ng build && cp -r dist/frontend/browser ../backend/cmd/strichliste/frontendDist
           - name: create coverage report
             working-directory: ./backend
             run: go test ./... -coverprofile=coverage.out && go tool cover -html=coverage.out -o coverage.html
