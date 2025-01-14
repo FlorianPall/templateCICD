@@ -7,24 +7,13 @@ on:
     pull_request:
         branches:
         - main
-
-env:
-  GO_VERSION: "1.19"
-  NODE_VERSION: "16"
-
 jobs:
-    checkout:
-        name: Checkout
+    tests:
+        name: Tests
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
               uses: actions/checkout@v4
-
-    build:
-        name: Build
-        needs: checkout
-        runs-on: ubuntu-latest
-        steps:
 
             - name: Install go
               uses: actions/setup-go@v5
@@ -38,17 +27,9 @@ jobs:
 
             - name: Build frontend
               working-directory: ./frontend
-              run: |
-                npm ci
-                npx ng build
-                mkdir -p ../backend/cmd/strichliste/frontendDist
-                cp -r dist/frontend/browser ../backend/cmd/strichliste/frontendDist
+              run: npm ci && npx ng build && cp -r dist/frontend/browser ../backend/cmd/strichliste/frontendDist
 
-    tests:
-        name: Tests
-        needs: build
-        runs-on: ubuntu-latest
-        steps:
             - name: Run tests
               working-directory: ./backend
               run: go test ./...
+            
