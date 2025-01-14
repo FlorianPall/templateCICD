@@ -66,7 +66,7 @@ jobs:
             run: npm ci && npx ng build && cp -r dist/frontend/browser ../backend/cmd/strichliste/frontendDist
           - name: create coverage report
             working-directory: ./backend
-            run: go test ./... -coverprofile=coverage.out && go tool cover -html=coverage.out -o coverage.html
+            run: go test ./... -coverprofile=coverage.out && go tool cover -html=coverage.out -o ../coverage.html
           - name: Copy files via SCP action
             uses: appleboy/scp-action@master
             with:
