@@ -2,14 +2,14 @@ version: 2
 updates:
   # Go Module Updates
   - package-ecosystem: "gomod"
-    directory: "/"
+    directory: "/backend"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 10
 
   # npm Updates
   - package-ecosystem: "npm"
-    directory: "/"
+    directory: "/frontend"
     schedule:
       interval: "daily"
     open-pull-requests-limit: 10
