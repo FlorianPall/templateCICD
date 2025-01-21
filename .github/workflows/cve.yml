@@ -26,7 +26,11 @@ jobs:
 
       - name: Install Trivy
         run: |
-          Hier installieren Flori
+          sudo apt-get install wget gnupg &&
+          wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor | sudo tee /usr/share/keyrings/trivy.gpg > /dev/null &&
+          echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb generic main" | sudo tee -a /etc/apt/sources.list.d/trivy.list &&
+          sudo apt-get update &&
+          sudo apt-get install trivy
 
 
       - name: Run Trivy (Scan for CVEs)
