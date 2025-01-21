@@ -35,7 +35,7 @@ jobs:
 
       - name: Run Trivy (Scan for CVEs)
         run: |
-          trivy fs . > cve-report.html
+          trivy fs --format html . > cve-report.html
           
       - name: Upload HTML Report as Artifact
         uses: actions/upload-artifact@v3
