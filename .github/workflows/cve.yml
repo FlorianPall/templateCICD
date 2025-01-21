@@ -38,7 +38,7 @@ jobs:
           scan-type: "fs"
           scan-ref: .
           format: 'template'
-          template: "@./html.tpl"
+          template: "@html.tpl"
 
 
       - name: Upload HTML Report as Artifact
