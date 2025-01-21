@@ -29,6 +29,7 @@ jobs:
           scan-ref: .
           format: 'template'
           template: "@html.tpl"
+          output: "cve-report.html"
 
 
       - name: Upload HTML Report as Artifact
