@@ -1,0 +1,52 @@
+name: CVE Dependency Scan
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Täglicher Ablauf (0 Uhr UTC)
+  workflow_dispatch:  # Manuelles Triggern des Workflows
+
+jobs:
+  scan:
+    name: Scan for CVEs in Dependencies
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+      
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - name: Run Trivy (Scan for CVEs)
+        run: |
+          trivy --exit-code 1 --severity HIGH,CRITICAL --no-progress --format template --template "@trivy.tpl" . > cve-report.html
+          
+      - name: Upload HTML Report as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: cve-report
+          path: cve-report.html
+
+  deploy:
+    name: Deploy HTML Report to Web Server
+    runs-on: ubuntu-latest
+    needs: scan
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Copy files via SCP action
+        uses: appleboy/scp-action@master
+        with:
+            host: dhbw.hoenle.xyz
+            username: group2
+            key: ${{ secrets.PRIVATE_SSH }}
+            source: "./cve-report.html"
+            target: "/var/www/group2/"
