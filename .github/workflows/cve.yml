@@ -35,8 +35,8 @@ jobs:
 
       - name: Run Trivy (Scan for CVEs)
         run: |
-          trivy fs --format html . > cve-report.html
-          
+              trivy fs --format template --template '@contrib/html.tpl' . > cve-report.html
+
       - name: Upload HTML Report as Artifact
         uses: actions/upload-artifact@v3
         with:
