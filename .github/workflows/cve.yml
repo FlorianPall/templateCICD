@@ -35,7 +35,8 @@ jobs:
 
       - name: Run Trivy (Scan for CVEs)
         run: |
-              trivy fs --format template --template '@contrib/html.tpl' . > cve-report.html
+             trivy image --format template --template "@contrib/html.tpl" -o report.html golang:1.12-alpine > cve-report.html
+
 
       - name: Upload HTML Report as Artifact
         uses: actions/upload-artifact@v3
