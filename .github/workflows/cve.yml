@@ -23,6 +23,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install Trivy
+        run: |
+          Hier installieren Flori
+
+
       - name: Run Trivy (Scan for CVEs)
         run: |
           trivy --exit-code 1 --severity HIGH,CRITICAL --no-progress --format template --template "@trivy.tpl" . > cve-report.html
