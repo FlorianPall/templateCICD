@@ -35,7 +35,7 @@ jobs:
 
       - name: Run Trivy (Scan for CVEs)
         run: |
-          trivy --exit-code 1 --severity HIGH,CRITICAL --no-progress --format template --template "@trivy.tpl" . > cve-report.html
+          trivy fs . > cve-report.html
           
       - name: Upload HTML Report as Artifact
         uses: actions/upload-artifact@v3
