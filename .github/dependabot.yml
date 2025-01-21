@@ -16,7 +16,8 @@ updates:
    groups:
      angular-updates:  # Gruppe für Angular-Pakete
        patterns:
-         - "@angular*"
+         - "*angular*"
+         - "*"
        update-types:
          - "major"
          - "minor"
