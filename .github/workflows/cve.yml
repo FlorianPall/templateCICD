@@ -52,6 +52,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Import HTML Report Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: cve-report
+
       - name: Copy files via SCP action
         uses: appleboy/scp-action@master
         with:
