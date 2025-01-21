@@ -25,7 +25,7 @@ jobs:
 
 
       - name: Upload HTML Report as Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: cve-report
           path: cve-report.html
