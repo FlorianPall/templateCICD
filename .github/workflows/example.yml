@@ -48,6 +48,7 @@ jobs:
 
     codecoverage:
         name: Code Coverage
+        if: github.actor != 'dependabot[bot]'
         needs: codeformatting
         runs-on: ubuntu-latest
         steps:
