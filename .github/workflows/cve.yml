@@ -13,7 +13,17 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-        
+
+      - name: Install Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+      
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
       - name: Install Trivy
         run: |
           sudo apt-get install wget gnupg &&
@@ -28,7 +38,7 @@ jobs:
           scan-type: "fs"
           scan-ref: .
           format: 'template'
-          template: "@/contrib/html.tpl"
+          template: "@./html.tpl"
 
 
       - name: Upload HTML Report as Artifact
