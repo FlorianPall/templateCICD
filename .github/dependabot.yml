@@ -5,18 +5,18 @@ updates:
     directory: "/backend"
     schedule:
       interval: "daily"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 15
 
   # npm Updates
   - package-ecosystem: "npm"
     directory: "/frontend"
     schedule:
       interval: "daily"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 15
 
   # GitHub Actions Updates
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "daily"
-    open-pull-requests-limit: 10
+    open-pull-requests-limit: 15
