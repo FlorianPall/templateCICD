@@ -28,7 +28,7 @@ jobs:
           scan-type: "fs"
           scan-ref: .
           format: 'template'
-          template: "@$HOME/.local/bin/trivy-bin/contrib/html.tpl"
+          template: "@/contrib/html.tpl"
 
 
       - name: Upload HTML Report as Artifact
