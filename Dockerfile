@@ -1,20 +1,22 @@
-# Stage 1: Angular build
-FROM node:22.11.0 AS angular_build
-WORKDIR /frontend
-COPY frontend/package*.json ./
-RUN npm install
+# FRONTEND STAGE
+FROM docker.io/node:22.11.0 AS frontend-build
+WORKDIR /app
+COPY frontend/package.json frontend/package-lock.json ./
+RUN npm ci
 COPY frontend/ ./
-RUN npm run build --prod
+RUN npx ng build
 
-# Stage 2: Go build
-FROM docker.io/golang:1.23.4 AS go_build
-WORKDIR /backend
+# BACKEND STAGE
+FROM docker.io/golang:1.23.4 AS backend-build
+WORKDIR /app
 COPY backend/go.mod backend/go.sum ./
+RUN go mod download
 COPY backend/ ./
-RUN CGO_ENABLED=0 go build -o strichliste ./cmd/strichliste/main.go
+COPY --from=frontend-build /app/dist/frontend/browser ./cmd/strichliste/frontendDist
+RUN CGO_ENABLED=0 go build -o ./strichliste ./cmd/strichliste/main.go
 
-# Final stage
-FROM gcr.io/distroless/static-debian12
-COPY --from=go_build /backend/strichliste /strichliste
+# FINAL STAGE
+FROM gcr.io/distroless/static-debian12:nonroot
+COPY --from=backend-build /app/strichliste /strichliste
 EXPOSE 8080
-ENTRYPOINT [ "/strichliste" ]
+ENTRYPOINT ["/strichliste"]
