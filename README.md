@@ -69,7 +69,7 @@ And here some further instructions which might be helpful for you during develop
 ```bash
 # running all the backend tests
 cd backend
-go run ./...
+go test ./...
 
 # creating a test coverage report for the backend
 cd backend
