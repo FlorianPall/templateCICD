@@ -10,8 +10,6 @@ RUN npm run build --prod
 FROM docker.io/golang:1.23.4 AS go_build
 WORKDIR /backend
 COPY backend/go.mod backend/go.sum ./
-RUN mkdir -p ./cmd/strichliste/frontendDist
-COPY --from=angular_build /frontend/dist/frontend/browser/* ./cmd/strichliste/frontendDist/
 COPY backend/ ./
 RUN CGO_ENABLED=0 go build -o strichliste ./cmd/strichliste/main.go
 
