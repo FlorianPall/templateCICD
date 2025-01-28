@@ -8,104 +8,104 @@ on:
         branches:
         - main
 jobs:
-    tests:
-        name: Tests
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout
-              uses: actions/checkout@v4
-
-            - name: Install go
-              uses: actions/setup-go@v5
-              with:
-                  go-version: ${{ env.GO_VERSION }}
-                
-            - name: Install node
-              uses: actions/setup-node@v3
-              with:
-                  node-version: ${{ env.NODE_VERSION }}
-
-            - name: Build frontend
-              working-directory: ./frontend
-              run: npm ci && npx ng build && cp -r dist/frontend/browser ../backend/cmd/strichliste/frontendDist
-
-            - name: Run tests
-              working-directory: ./backend
-              run: go test ./...
-    
-    codeformatting:
-        name: Formatting
-        runs-on: ubuntu-latest
-        steps:
+  tests:
+      name: Tests
+      runs-on: ubuntu-latest
+      steps:
           - name: Checkout
             uses: actions/checkout@v4
+
           - name: Install go
             uses: actions/setup-go@v5
             with:
-              go-version: ${{ env.GO_VERSION }}
-          - name: Run gofmt
-            run: files=$(gofmt -l ./backend) && [ -z "$files" ]
-
-    codecoverage:
-        name: Code Coverage
-        if: github.actor != 'dependabot[bot]'
-        needs: codeformatting
-        runs-on: ubuntu-latest
-        steps:
-          - name: Checkout
-            uses: actions/checkout@v4
-          - name: Install go
-            uses: actions/setup-go@v5
-            with:
-              go-version: ${{ env.GO_VERSION }}
+                go-version: ${{ env.GO_VERSION }}
+              
           - name: Install node
             uses: actions/setup-node@v3
             with:
-              node-version: ${{ env.NODE_VERSION }}
+                node-version: ${{ env.NODE_VERSION }}
+
           - name: Build frontend
             working-directory: ./frontend
             run: npm ci && npx ng build && cp -r dist/frontend/browser ../backend/cmd/strichliste/frontendDist
-          - name: create coverage report
+
+          - name: Run tests
             working-directory: ./backend
-            run: go test ./... -coverprofile=coverage.out && go tool cover -html=coverage.out -o ../coverage.html
-          - name: Copy files via SCP action
-            uses: appleboy/scp-action@master
-            with:
-              host: dhbw.hoenle.xyz
-              username: group2
-              key: ${{ secrets.PRIVATE_SSH }}
-              source: "./coverage.html"
-              target: "/var/www/group2/"
-    
-      container:
-        runs-on: ubuntu-latest
-    
-        steps:
-          - name: Checkout Repository
-            uses: actions/checkout@v4
-    
-          - name: Login container registry
-            uses: docker/login-action@v3
-            with:
-              registry: ghcr.io
-              username: ${{ github.repository_owner }}
-              password: ${{ secrets.GITHUB_TOKEN }}
-            
-          - name: Extract metadata
-            id: meta
-            uses: docker/metadata-action@v5
-            with:
-              images: ghcr.io/${{ github.repository }}
-          
-          - name: Build and push
-            uses: docker/build-push-action@v5
-            with:
-                context: .
-                push: ${{ github.ref_name == 'main' }}
-                tags: ${{ steps.meta.outputs.tags }}
-                labels: ${{ steps.meta.outputs.labels }}
+            run: go test ./...
+  
+  codeformatting:
+      name: Formatting
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+        - name: Install go
+          uses: actions/setup-go@v5
+          with:
+            go-version: ${{ env.GO_VERSION }}
+        - name: Run gofmt
+          run: files=$(gofmt -l ./backend) && [ -z "$files" ]
+
+  codecoverage:
+      name: Code Coverage
+      if: github.actor != 'dependabot[bot]'
+      needs: codeformatting
+      runs-on: ubuntu-latest
+      steps:
+        - name: Checkout
+          uses: actions/checkout@v4
+        - name: Install go
+          uses: actions/setup-go@v5
+          with:
+            go-version: ${{ env.GO_VERSION }}
+        - name: Install node
+          uses: actions/setup-node@v3
+          with:
+            node-version: ${{ env.NODE_VERSION }}
+        - name: Build frontend
+          working-directory: ./frontend
+          run: npm ci && npx ng build && cp -r dist/frontend/browser ../backend/cmd/strichliste/frontendDist
+        - name: create coverage report
+          working-directory: ./backend
+          run: go test ./... -coverprofile=coverage.out && go tool cover -html=coverage.out -o ../coverage.html
+        - name: Copy files via SCP action
+          uses: appleboy/scp-action@master
+          with:
+            host: dhbw.hoenle.xyz
+            username: group2
+            key: ${{ secrets.PRIVATE_SSH }}
+            source: "./coverage.html"
+            target: "/var/www/group2/"
+  
+  container:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Login container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
         
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+      
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+            context: .
+            push: ${{ github.ref_name == 'main' }}
+            tags: ${{ steps.meta.outputs.tags }}
+            labels: ${{ steps.meta.outputs.labels }}
+    
 
 
 
-            
+        
