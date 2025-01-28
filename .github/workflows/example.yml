@@ -104,5 +104,5 @@ jobs:
             context: .
             push: ${{ github.ref_name == 'main' }}
             tags: |
-              ghcr.io/${{ github.repository_owner }}/template:latest
-              ghcr.io/${{ github.repository_owner }}/template:${{ github.sha }} 
+              ghcr.io/pallmannderesel/template:latest
+              ghcr.io/pallmannderesel/template:${{ github.sha }} 
